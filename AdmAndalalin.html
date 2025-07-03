@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Administrasi ANDALALIN Dishub</title>
+  <title>Form Permohonan ANDALALIN</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     * { box-sizing: border-box; }
@@ -12,7 +12,7 @@
       margin: 0;
       padding: 10px;
     }
-    .menu-container, .login-container, .container {
+    .container {
       background: #fff;
       padding: 20px;
       border-radius: 12px;
@@ -22,7 +22,7 @@
       margin-bottom: 20px;
     }
     h2, h3 { text-align: center; }
-    .btn, button {
+    button {
       display: inline-block;
       padding: 12px 20px;
       margin: 8px 0;
@@ -33,20 +33,8 @@
       font-size: 16px;
       width: 100%;
     }
-    .btn:hover, button:hover { background: #0056b3; }
-    .icon-link {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-    .icon-link a {
-      margin: 0 10px;
-      font-size: 24px;
-      color: #007bff;
-      text-decoration: none;
-    }
-    .icon-link a:hover { color: #0056b3; }
-    input, select {
+    button:hover { background: #0056b3; }
+    input {
       width: 100%;
       padding: 12px;
       margin: 6px 0;
@@ -54,56 +42,11 @@
       border-radius: 8px;
       font-size: 14px;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      overflow-x: auto;
-      display: block;
-    }
-    table, th, td {
-      border: 1px solid #ddd;
-    }
-    th {
-      background: #007bff;
-      color: #fff;
-      font-weight: bold;
-      text-align: center;
-    }
-    td {
-      text-align: center;
-      font-size: 14px;
-    }
-    .admin-icon {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 24px;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
 
-<div class="menu-container" id="menu">
-  <h2>Administrasi ANDALALIN Dishub</h2>
-  <div class="icon-link">
-    <a href="#" target="_blank">📷</a>
-    <a href="mailto:example@example.com">📧</a>
-  </div>
-  <button class="btn" onclick="loginTamu()">📝 Memohon</button>
-  <span class="admin-icon" onclick="showAdminLogin()">🔑</span>
-</div>
-
-<div class="login-container" id="login" style="display:none">
-  <h3>Login Admin</h3>
-  <input type="text" id="username" placeholder="Username">
-  <input type="password" id="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <button onclick="backMenu()">Kembali</button>
-</div>
-
-<div class="container" id="app" style="display:none">
+<div class="container">
   <h2>Form Permohonan ANDALALIN</h2>
   <input type="text" id="nomerSurat" placeholder="Nomor Surat">
   <input type="date" id="tanggal">
@@ -112,67 +55,10 @@
   <input type="text" id="ruasJalan" placeholder="Alamat Pembangunan">
   <input type="text" id="skrk" placeholder="SKRK">
   <button onclick="tambahData()">Simpan</button>
-
-  <div id="adminArea" style="display:none">
-    <h3>Rekap Data</h3>
-    <table id="dataTable">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Nomor Surat</th>
-          <th>Tanggal</th>
-          <th>Nama Pemohon</th>
-          <th>Rencana Pembangunan</th>
-          <th>Kategori Bangkitan</th>
-          <th>Alamat</th>
-          <th>Status Jalan</th>
-          <th>SKRK</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <button onclick="downloadExcel()" id="downloadBtn">Download Excel</button>
-  </div>
-
-  <button onclick="logout()">Logout</button>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-  let userRole = '';
   let data = JSON.parse(localStorage.getItem('andalalinData')) || [];
-
-  function showAdminLogin() {
-    document.getElementById('menu').style.display = 'none';
-    document.getElementById('login').style.display = 'block';
-  }
-
-  function backMenu() {
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('menu').style.display = 'block';
-  }
-
-  function login() {
-    const u = document.getElementById('username').value;
-    const p = document.getElementById('password').value;
-    if (u === 'admin' && p === 'admin123') {
-      userRole = 'admin';
-      document.getElementById('login').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-      document.getElementById('adminArea').style.display = 'block';
-      tampilData();
-    } else {
-      alert('Login Admin salah!');
-    }
-  }
-
-  function loginTamu() {
-    userRole = 'tamu';
-    document.getElementById('menu').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    document.getElementById('adminArea').style.display = 'none';
-  }
 
   function tambahData() {
     const obj = {
@@ -180,108 +66,25 @@
       tanggal: document.getElementById('tanggal').value,
       pemohon: document.getElementById('pemohon').value,
       rencana: document.getElementById('rencana').value,
-      kategori: '',
       ruasJalan: document.getElementById('ruasJalan').value,
-      statusJalan: '',
       skrk: document.getElementById('skrk').value
     };
+
+    if (obj.nomerSurat === '' || obj.tanggal === '' || obj.pemohon === '' || obj.rencana === '' || obj.ruasJalan === '') {
+      alert('Harap lengkapi semua data.');
+      return;
+    }
+
     data.push(obj);
     localStorage.setItem('andalalinData', JSON.stringify(data));
-    if (userRole === 'admin') tampilData();
+    alert('Data berhasil disimpan!');
     clearForm();
   }
 
-  function tampilData() {
-    const tb = document.querySelector('#dataTable tbody');
-    tb.innerHTML = '';
-    data.forEach((d, i) => {
-      tb.innerHTML += `
-        <tr>
-          <td>${i+1}</td>
-          <td>${d.nomerSurat}</td>
-          <td>${d.tanggal}</td>
-          <td>${d.pemohon}</td>
-          <td>${d.rencana}</td>
-          <td>${userRole === 'admin' ? `<input type="text" value="${d.kategori}" id="kategori${i}">` : d.kategori}</td>
-          <td>${d.ruasJalan}</td>
-          <td>${userRole === 'admin' ? `<input type="text" value="${d.statusJalan}" id="status${i}">` : d.statusJalan}</td>
-          <td>${d.skrk}</td>
-          <td>
-            ${userRole === 'admin' ? `<button onclick="simpanEdit(${i})">Simpan</button>` : ''}
-            ${userRole === 'admin' ? `<button onclick="hapusData(${i})">Hapus</button>` : ''}
-          </td>
-        </tr>
-      `;
-    });
-  }
-
-  function simpanEdit(i) {
-    data[i].kategori = document.getElementById('kategori' + i).value;
-    data[i].statusJalan = document.getElementById('status' + i).value;
-    localStorage.setItem('andalalinData', JSON.stringify(data));
-    tampilData();
-  }
-
-  function hapusData(i) {
-    if (confirm('Hapus data ini?')) {
-      data.splice(i, 1);
-      localStorage.setItem('andalalinData', JSON.stringify(data));
-      tampilData();
-    }
-  }
-
-  function downloadExcel() {
-    const ws = XLSX.utils.json_to_sheet(data, {header: [
-      "nomerSurat", "tanggal", "pemohon", "rencana", "kategori", "ruasJalan", "statusJalan", "skrk"
-    ]});
-
-    const header = [
-      "Nomor Surat", "Tanggal", "Nama Pemohon", "Rencana Pembangunan",
-      "Kategori Bangkitan", "Alamat", "Status Jalan", "SKRK"
-    ];
-    XLSX.utils.sheet_add_aoa(ws, [header], {origin: "A1"});
-
-    const range = XLSX.utils.decode_range(ws['!ref']);
-    for(let C = range.s.c; C <= range.e.c; ++C) {
-      const cell_address = XLSX.utils.encode_cell({c:C, r:0});
-      if(!ws[cell_address]) continue;
-      ws[cell_address].s = {
-        font: { bold: true, color: { rgb: "FFFFFF" } },
-        alignment: { horizontal: "center", vertical: "center" },
-        fill: { fgColor: { rgb: "007bff" } },
-        border: {
-          top: {style:"thin"}, bottom: {style:"thin"},
-          left: {style:"thin"}, right: {style:"thin"}
-        }
-      };
-    }
-
-    for(let R = 1; R <= range.e.r; ++R){
-      for(let C = range.s.c; C <= range.e.c; ++C){
-        const cell_address = XLSX.utils.encode_cell({c:C, r:R});
-        if(!ws[cell_address]) continue;
-        ws[cell_address].s = {
-          alignment: { horizontal: "center", vertical: "center" },
-          border: {
-            top: {style:"thin"}, bottom: {style:"thin"},
-            left: {style:"thin"}, right: {style:"thin"}
-          }
-        };
-      }
-    }
-
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Data ANDALALIN');
-    XLSX.writeFile(wb, 'Rekap_ANDALALIN.xlsx');
-  }
-
   function clearForm() {
-    document.querySelectorAll('#app input').forEach(el => el.value = '');
-  }
-
-  function logout() {
-    location.reload();
+    document.querySelectorAll('input').forEach(el => el.value = '');
   }
 </script>
+
 </body>
 </html>
