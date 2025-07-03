@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Form Permohonan ANDALALIN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 10px;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 800px;
+      margin: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    h2, h3 { text-align: center; }
+    button {
+      display: inline-block;
+      padding: 12px 20px;
+      margin: 8px 0;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      width: 100%;
+    }
+    button:hover { background: #0056b3; }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Form Permohonan ANDALALIN</h2>
+  <input type="text" id="nomerSurat" placeholder="Nomor Surat">
+  <input type="date" id="tanggal">
+  <input type="text" id="pemohon" placeholder="Nama Pemohon">
+  <input type="text" id="rencana" placeholder="Rencana Pembangunan">
+  <input type="text" id="ruasJalan" placeholder="Alamat Pembangunan">
+  <input type="text" id="skrk" placeholder="SKRK">
+  <button onclick="tambahData()">Simpan</button>
+</div>
+
+<script>
+  let data = JSON.parse(localStorage.getItem('andalalinData')) || [];
+
+  function tambahData() {
+    const obj = {
+      nomerSurat: document.getElementById('nomerSurat').value,
+      tanggal: document.getElementById('tanggal').value,
+      pemohon: document.getElementById('pemohon').value,
+      rencana: document.getElementById('rencana').value,
+      ruasJalan: document.getElementById('ruasJalan').value,
+      skrk: document.getElementById('skrk').value
+    };
+
+    if (obj.nomerSurat === '' || obj.tanggal === '' || obj.pemohon === '' || obj.rencana === '' || obj.ruasJalan === '') {
+      alert('Harap lengkapi semua data.');
+      return;
+    }
+
+    data.push(obj);
+    localStorage.setItem('andalalinData', JSON.stringify(data));
+    alert('Data berhasil disimpan!');
+    clearForm();
+  }
+
+  function clearForm() {
+    document.querySelectorAll('input').forEach(el => el.value = '');
+  }
+</script>
+
+</body>
+</html>
